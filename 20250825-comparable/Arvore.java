@@ -1,7 +1,18 @@
-public interface Arvore<T> {
+/**
+ * Interface de uma Árvore Binária de Busca.
+ * Define operações básicas como inserção, busca e caminhamentos.
+ * @author
+ * @version 2025.08.14
+ */
+public interface Arvore<T extends Comparable<T>> {
 
-    public NodoArvore<T> pesquisa (T objeto);
-    public void inserir (T objeto);
-    public void remover (T objeto);
-    public void imprimePreFixado ();
+    void inserir(T valor);
+
+    boolean buscar(T valor);
+
+    void imprimePreFixado();
+
+    void imprimeEmOrdem();
+
+    void imprimePosFixado();
 }

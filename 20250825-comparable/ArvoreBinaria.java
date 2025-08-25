@@ -1,16 +1,17 @@
 /**
  * Implementação de uma Árvore Binária de Busca.
  * Foco em operações recursivas para inserção, busca e remoção.
- * * @author Equipe da Disciplina
+ * @author Equipe da Disciplina
  * @version 2025.08.14
  */
-public class ArvoreBinaria<T> implements Arvore<T> {
+public class ArvoreBinaria<T extends Comparable<T>> implements Arvore<T> {
 
+    private NodoArvore<T> raiz;
 
     /**
      * Construtor da árvore. Inicia uma árvore vazia.
      */
-    public ArvoreBinaria<T>() {
+    public ArvoreBinaria() {
         this.raiz = null;
     }
 
@@ -18,91 +19,112 @@ public class ArvoreBinaria<T> implements Arvore<T> {
 
     /**
      * Método público para inserir um novo valor na árvore.
-     * Ele chama o método auxiliar recursivo para encontrar a posição correta. [cite: 7]
+     * Ele chama o método auxiliar recursivo para encontrar a posição correta.
      *
-     * @param valor O valor inteiro a ser inserido.
+     * @param valor O valor a ser inserido.
      */
     @Override
-    public void inserir(T objeto) {
+    public void inserir(T valor) {
         this.raiz = inserirRecursivo(this.raiz, valor);
     }
 
     /**
      * Método auxiliar recursivo para inserir um novo nó.
-     * A lógica segue o pseudocódigo "função insere". 
      * Se a subárvore atual é nula, o novo nó é inserido aqui.
-     * Caso contrário, a busca continua recursivamente pela subárvore
-     * esquerda ou direita. [cite: 1, 7]
      *
      * @param noAtual O nó raiz da subárvore atual.
      * @param valor O valor a ser inserido.
      * @return O nó raiz da subárvore modificada.
      */
-    private NodoArvore<T> inserirRecursivo(NodoArvore<T> noAtual, T objeto) {
-        // Caso base: se a árvore (ou subárvore) estiver vazia, cria o novo nó.
+    private NodoArvore<T> inserirRecursivo(NodoArvore<T> noAtual, T valor) {
         if (noAtual == null) {
-            return new NodoArvore(valor);
+            return new NodoArvore<>(valor);
         }
 
-        // Caso recursivo: desce na árvore
-        if (valor < noAtual.chave) {
-            noAtual.filhoEsquerdo = inserirRecursivo(noAtual.filhoEsquerdo, valor);
-        } else if (valor > noAtual.chave) {
-            noAtual.filhoDireito = inserirRecursivo(noAtual.filhoDireito, valor);
+        if (valor.compareTo(noAtual.getValor()) < 0) {
+            noAtual.setEsquerda(inserirRecursivo(noAtual.getEsquerda(), valor));
+        } else if (valor.compareTo(noAtual.getValor()) > 0) {
+            noAtual.setDireita(inserirRecursivo(noAtual.getDireita(), valor));
         }
-        
-        // Se o valor já existe, não faz nada e retorna o nó como está.
+
         return noAtual;
     }
-    
+
     // --- MÉTODO DE PESQUISA ---
-    
+
     /**
      * Método público para pesquisar um valor na árvore.
      * @param valor O valor a ser procurado.
-     * @return O nó que contém o valor, ou null se não for encontrado.
+     * @return true se encontrar, false caso contrário.
      */
     @Override
-    public NodoArvore<T> pesquisa(T objeto) {
-        return pesquisaRecursivo(this.raiz, objeto);
+    public boolean buscar(T valor) {
+        return pesquisaRecursivo(this.raiz, valor);
     }
 
     /**
-     * Método auxiliar recursivo para buscar um valor. [cite: 7]
-     * Compara o valor com o nó atual e decide se continua a busca
-     * na subárvore esquerda ou direita. [cite: 1, 7]
+     * Método auxiliar recursivo para buscar um valor.
      *
      * @param noAtual O nó raiz da subárvore de busca.
      * @param valor O valor a ser procurado.
-     * @return O nó encontrado ou null.
+     * @return true se encontrar, false caso contrário.
      */
-    private NodoArvore<T> pesquisaRecursivo(NodoArvore<T> noAtual, T objeto) {
-        if (noAtual == null || noAtual.objeto == objeto) {
-            return noAtual;
+    private boolean pesquisaRecursivo(NodoArvore<T> noAtual, T valor) {
+        if (noAtual == null) {
+            return false;
         }
-
-        if (objeto < noAtual.objeto) {
-            return pesquisaRecursivo(noAtual.filhoEsquerdo, objeto);
-        } else {
-            return pesquisaRecursivo(noAtual.filhoDireito, objeto);
+        if (valor.equals(noAtual.getValor())) {
+            return true;
         }
+        return valor.compareTo(noAtual.getValor()) < 0
+                ? pesquisaRecursivo(noAtual.getEsquerda(), valor)
+                : pesquisaRecursivo(noAtual.getDireita(), valor);
     }
-    
-    // --- MÉTODO DE IMPRESSÃO (CAMINHAMENTO) ---
-    
-    /**
-     * Imprime os elementos da árvore usando o caminhamento pré-fixado. [cite: 7]
-     * Raiz -> Esquerda -> Direita. 
-     */
+
+    // --- MÉTODOS DE IMPRESSÃO (CAMINHAMENTO) ---
+
+    /** Pré-fixado: Raiz -> Esquerda -> Direita */
     @Override
     public void imprimePreFixado() {
-    }
-    
-    /**
-     * Método auxiliar recursivo para o caminhamento pré-fixado.
-     * @param no O nó raiz da subárvore a ser impressa.
-     */
-    private void imprimePreFixadoRecursivo(NodoArvore<T> no) {
+        imprimePreFixadoRecursivo(this.raiz);
+        System.out.println();
     }
 
+    private void imprimePreFixadoRecursivo(NodoArvore<T> no) {
+        if (no != null) {
+            System.out.print(no.getValor() + " ");
+            imprimePreFixadoRecursivo(no.getEsquerda());
+            imprimePreFixadoRecursivo(no.getDireita());
+        }
+    }
+
+    /** Em ordem: Esquerda -> Raiz -> Direita */
+    @Override
+    public void imprimeEmOrdem() {
+        imprimeEmOrdemRecursivo(this.raiz);
+        System.out.println();
+    }
+
+    private void imprimeEmOrdemRecursivo(NodoArvore<T> no) {
+        if (no != null) {
+            imprimeEmOrdemRecursivo(no.getEsquerda());
+            System.out.print(no.getValor() + " ");
+            imprimeEmOrdemRecursivo(no.getDireita());
+        }
+    }
+
+    /** Pós-fixado: Esquerda -> Direita -> Raiz */
+    @Override
+    public void imprimePosFixado() {
+        imprimePosFixadoRecursivo(this.raiz);
+        System.out.println();
+    }
+
+    private void imprimePosFixadoRecursivo(NodoArvore<T> no) {
+        if (no != null) {
+            imprimePosFixadoRecursivo(no.getEsquerda());
+            imprimePosFixadoRecursivo(no.getDireita());
+            System.out.print(no.getValor() + " ");
+        }
+    }
 }
