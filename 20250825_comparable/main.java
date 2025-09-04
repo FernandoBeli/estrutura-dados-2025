@@ -1,18 +1,25 @@
-public class main {
+public class Main {
     public static void main(String[] args) {
-        Automovel auto1 = new Automovel("Marca1", "Modelo1", "Tipo1", "Chassi1", "2020", "2021", "Cor1", "Placa1");
-        ArvoreBinaria<Automovel> arvore = new ArvoreBinaria<>();
-        arvore.inserir(auto1);
-        Automovel auto2 = new Automovel("Marca2", "Modelo1", "Tipo1", "Chassi1", "2020", "2021", "Cor1", "Placa1");
-        Automovel auto3 = new Automovel("Marca3", "Modelo1", "Tipo1", "Chassi1", "2020", "2021", "Cor1", "Placa1");
-        Automovel auto4 = new Automovel("Marca4", "Modelo1", "Tipo1", "Chassi1", "2020", "2021", "Cor1", "Placa1");
-        Automovel auto5 = new Automovel("Marca5", "Modelo1", "Tipo1", "Chassi1", "2020", "2021", "Cor1", "Placa1");
-        Automovel auto6 = new Automovel("Marca6", "Modelo1", "Tipo1", "Chassi1", "2020", "2021", "Cor1", "Placa1");
-        arvore.inserir(auto4);
-        arvore.inserir(auto6);
-        arvore.inserir(auto3);
-        arvore.inserir(auto5);
-        arvore.inserir(auto2);
+        // criando clientes (dados fictícios)
+        Cliente cliente1 = new Cliente("João", "Silva", "11111111111", "11999999999", "joao@email.com", "Rua A, 123");
+        Cliente cliente2 = new Cliente("Maria", "Oliveira", "22222222222", "11988888888", "maria@email.com", "Rua B, 456");
+        Cliente cliente3 = new Cliente("Carlos", "Souza", "33333333333", "11977777777", "carlos@email.com", "Rua C, 789");
+        Cliente cliente4 = new Cliente("Ana", "Lima", "44444444444", "11966666666", "ana@email.com", "Rua D, 321");
+        Cliente cliente5 = new Cliente("Pedro", "Santos", "55555555555", "11955555555", "pedro@email.com", "Rua E, 654");
+        Cliente cliente6 = new Cliente("Paula", "Ferreira", "66666666666", "11944444444", "paula@email.com", "Rua F, 987");
+
+        // cria árvore binária de clientes
+        ArvoreBinaria<Cliente> arvore = new ArvoreBinaria<>();
+
+        // insere clientes
+        arvore.inserir(cliente1);
+        arvore.inserir(cliente4);
+        arvore.inserir(cliente6);
+        arvore.inserir(cliente3);
+        arvore.inserir(cliente5);
+        arvore.inserir(cliente2);
+
+        // imprime clientes
         arvore.imprimeEmOrdem();
         arvore.imprimePreFixado();
     }
